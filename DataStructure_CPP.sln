@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Linear_Structure", "Project\stack\stack.vcxproj", "{D8C83EFA-EDE4-4045-B25F-6CCE3861980C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recursion", "Project\recursion\recursion.vcxproj", "{FE105CED-F1FC-4780-A4C5-D5D7D4A8EB28}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tree", "Project\Tree\Tree.vcxproj", "{621B2C3F-AE1E-41BA-8A39-075E09652BAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8C83EFA-EDE4-4045-B25F-6CCE3861980C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D8C83EFA-EDE4-4045-B25F-6CCE3861980C}.Debug|Win32.Build.0 = Debug|Win32
+		{D8C83EFA-EDE4-4045-B25F-6CCE3861980C}.Release|Win32.ActiveCfg = Release|Win32
+		{D8C83EFA-EDE4-4045-B25F-6CCE3861980C}.Release|Win32.Build.0 = Release|Win32
+		{FE105CED-F1FC-4780-A4C5-D5D7D4A8EB28}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FE105CED-F1FC-4780-A4C5-D5D7D4A8EB28}.Debug|Win32.Build.0 = Debug|Win32
+		{FE105CED-F1FC-4780-A4C5-D5D7D4A8EB28}.Release|Win32.ActiveCfg = Release|Win32
+		{FE105CED-F1FC-4780-A4C5-D5D7D4A8EB28}.Release|Win32.Build.0 = Release|Win32
+		{621B2C3F-AE1E-41BA-8A39-075E09652BAF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{621B2C3F-AE1E-41BA-8A39-075E09652BAF}.Debug|Win32.Build.0 = Debug|Win32
+		{621B2C3F-AE1E-41BA-8A39-075E09652BAF}.Release|Win32.ActiveCfg = Release|Win32
+		{621B2C3F-AE1E-41BA-8A39-075E09652BAF}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
