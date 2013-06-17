@@ -8,41 +8,18 @@ public:
 	CBSTree() {}
 	CBSTree(T array[], int size)
 		:CBTree(array, size) { m_pNodeRoot = CreateBinaryTree(array, 0, size); }
-
-private:
+protected:
 	CBTNode<T>* CreateNewNode(const T &data);
-	CBTNode<T>* InsertNode(const T &data, CBTNode<T>* p);
-	CBTNode<T>* DeleteNode(const T &data, CBTNode<T>* p);
+	virtual CBTNode<T>* InsertNode(const T &data, CBTNode<T>* p);
+	virtual CBTNode<T>* DeleteNode(const T &data, CBTNode<T>* p);
 	CBTNode<T>* FindMin(CBTNode<T>* p);
 	CBTNode<T>* FindMax(CBTNode<T>* p);
-
+	void InsertNodeWithoutRecursion(const T &data);	
+	void DeleteNodeWithoutRecursion(const T &data);
 public:
-	//递归版本
-	void InsertNode(const T &data)
-	{ 
-		InsertNodeWithoutRecursion(data);
-	}
-
-	void InsertNodeWithoutRecursion(const T &data);
-	CBTNode<T>* DeleteNodeEx(const T &data, CBTNode<T>* p);
-	void DeleteNode(const T &data, CBTNode<T>* p);
+	void Insert(const T &data){ InsertNodeWithoutRecursion(data); }
+	void Delete(const T &data){ DeleteNode(data, m_pNodeRoot); }
 };
-
-template<typename T>
-inline void CBSTree<T>::DeleteNode( const T &data, CBTNode<T>* p )
-{
-	try{
-		//if(NULL == p)
-			//throw MyException("data not find!");
-		//begin of the right precess
-		//MYTRACE("start the delete node:");
-
-	}
-	catch(MyException& e){
-		cout<<"DeleteNode: "<<e.GetErrorInfo()<<endl;
-		return NULL;
-	}
-}
 
 //非递归的算法框架
 //在二叉搜索树的最大节点为此树最右边的节点
@@ -65,39 +42,39 @@ inline CBTNode<T>* CBSTree<T>::FindMin( CBTNode<T>* p )
 		return FindMin(p->left);
 }
 
-//二叉搜索数的递归删除框架
-//1. 下降周游找到要删除的结点p；
-//2. 若p
+//二叉搜索数的递归删除框架:
+//1. 下降周游查找要删除的结点p；
+//2. 若结点是树叶，则立即删除，
+//   若结点有一个树叶，则其父结点可以绕过该结点指向其儿子结点，然后该结点被删除；
+//   以上两种情况可以归为一类；
+//3. 若有两个儿子的结点：
+//   删除策略一：用右子树的最小结点（也就是中序递归的第一个结点）替代该结点的数据并递归删除那个结点;
+//             因为右子树中的最小结点不可能有左儿子，所以第二次删除情况退化到第一种情况；
+//   删除策略二：同理，用左子树的最大结点（也就是中序递归的最后一个结点）替代该结点的数据并递归删除那个结点；
+//   此删除算法在平衡树可以得到改进
 template<typename T>
-inline CBTNode<T>* CBSTree<T>::DeleteNodeEx( const T &data, CBTNode<T>* p)
+inline CBTNode<T>* CBSTree<T>::DeleteNode( const T &data, CBTNode<T>* p)
 {
-	CBTNode<T>* pointer = NULL;
-	try{
-		if(NULL == p)
-			throw MyException("data not find!");
-		if(data < p->data)
-			p->left = DeleteNode(data, p->left);
-		else if (data > p->data)
-			p->right = DeleteNode(data, p->right);
-		else if( p->left && p->right){
-			pointer = FindMin(p->right);//找到右子树中最小的节点
-			p->data = pointer->data;
-			p->right = DeleteNode(p->data, p->right);
-		}else{//One or zero children
-			pointer = p;
-			if(NULL == pointer->left)
-				pointer = pointer->right;
-			else if(NULL == pointer->right)
-				pointer = pointer->left;
-			MYTRACE("delte node %d succeeded!", p->data);
-			free(pointer);
-		}
-		return p;
+	CBTNode<T>* pTemp = NULL;
+	if(data < p->data)
+		p->left = DeleteNode(data, p->left);
+	else if (data > p->data)
+		p->right = DeleteNode(data, p->right);
+	else if( p->left && p->right){
+		pTemp = FindMin(p->right);//replace with smallest in right subtree
+		p->data = pTemp->data;
+		p->right = DeleteNode(p->data, p->right);
+	}else{//One or zero children
+		MYTRACE("delte node %d succeeded!", p->data);
+		pTemp = p;
+		if(NULL == p->left)
+			p = p->right;
+		else if(NULL == p->right)
+			p = p->left;
+		free(pTemp);
 	}
-	catch(MyException& e){
-		cout<<"DeleteNodeEx: "<<e.GetErrorInfo()<<endl;
-		return NULL;
-	}
+	return p;
+
 }
 
 template<typename T>

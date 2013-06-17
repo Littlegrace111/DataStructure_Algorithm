@@ -1,6 +1,7 @@
 #ifndef _BINARY_TREE_H
 #define _BINARY_TREE_H
 
+#include <iostream>
 #include "..\Common\HandleException.h"
 #include "..\Common\MemoryLeakTest.h"
 #include "..\LinkerList\Queue.h"
@@ -24,6 +25,7 @@ struct CBTNode{
 //效率由高到低：前序->中序->后序
 template<typename T>
 class CBTree{
+	friend void PrintTree(const CBTree<T> &tree);
 public:
 	CBTree():m_pNodeRoot(NULL){}
 	explicit CBTree(T array[], int size)
@@ -105,6 +107,7 @@ protected:
 		const CBTNode<T>* p,
 		void (*Visit)(const T &data)
 	)const;
+
 	//获得二叉树的深度
 	unsigned int GetDepth(const CBTNode<T>* p) const;
 	//获得二叉树节点个数
@@ -121,8 +124,11 @@ protected:
 	CBTNode<T>* GetParent(CBTNode<T>* p, CBTNode<T>* current);
 
 public:
-	CBTNode<T>* CreateBinaryTree(const T array[], int i, int size);
+	virtual void Insert(const T &data) {}
+	virtual void Delete(const T &data) {}
+	void PrintTree();
 
+	CBTNode<T>* CreateBinaryTree(const T array[], int i, int size);
 	/////////////////////////////////////////////////////////////////
 	void PreOrderTraverseWithoutRecursion(void (*Visit)(const T &data))
 	{
@@ -176,6 +182,32 @@ public:
 		return Count;
 	}
 };
+
+template<typename T>
+inline void CBTree<T>::PrintTree()
+{
+	std::cout<<"--------------------------------"<<endl;
+	if(m_pNodeRoot == NULL){
+		std::cout<<"null tree"<<std::endl;
+		return;
+	}
+	CQueue<CBTNode<T>*> aQueue;
+	CBTNode<T>* pointer = const_cast<CBTNode<T>*>(m_pNodeRoot);
+	aQueue.EnQueue(pointer); //根节点入队
+	while(!aQueue.IsEmpty()){
+		pointer = aQueue.GetFront(); //取队列首节点
+		std::cout<<pointer->data<<std::endl;
+		aQueue.DeQueue();
+		if(pointer->left){
+			aQueue.EnQueue(pointer->left);
+			std::cout<<pointer->left->data;
+		}if(pointer->right){
+			aQueue.EnQueue(pointer->right);
+			std::cout<<pointer->right->data;
+		}
+		std::cout<<std::endl;
+	}
+}
 
 template<typename T>
 inline CBTNode<T>* CBTree<T>::GetParent(CBTNode<T>* p, CBTNode<T>* current)
@@ -261,7 +293,7 @@ inline unsigned int CBTree<T>::GetDepth( const CBTNode<T>* p ) const
 }
 
 ///////////////////////////////////////////////////////////////
-//广度优先周游
+//广度优先周游：
 //根节点入队；
 //队列不为空，访问队首，队首出队，左子树和右子树入队；
 //依次上面的步骤直到为空；
