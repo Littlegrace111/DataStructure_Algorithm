@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{621B2C3F-AE1E-41BA-8A39-075E09652BAF}</ProjectGuid>
+    <ProjectGuid>{4D716251-0D2C-4257-AEA3-99B370D0B86A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Tree</RootNamespace>
+    <RootNamespace>BiHeap</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -58,7 +58,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -72,17 +73,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
+    <ClInclude Include="..\..\src\Tree\MinHeap.h" />
+    <ClInclude Include="..\..\src\Tree\MaxHeap.h" />
+    <ClInclude Include="..\..\src\Tree\Huffman.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Common\HandleException.h" />
-    <ClInclude Include="..\..\src\Tree\AVLTree.h" />
-    <ClInclude Include="..\..\src\Tree\BSTree.h" />
-    <ClInclude Include="..\..\src\Tree\BTree.h" />
-    <ClInclude Include="..\..\src\Tree\Heap.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\UnitTest\Tree.cpp" />
+    <ClCompile Include="..\..\src\UnitTest\BHeapTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

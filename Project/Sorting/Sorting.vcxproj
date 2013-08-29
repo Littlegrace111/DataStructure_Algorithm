@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{621B2C3F-AE1E-41BA-8A39-075E09652BAF}</ProjectGuid>
+    <ProjectGuid>{1AA5E171-30A6-490C-96AA-306CD9D985F7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Tree</RootNamespace>
+    <RootNamespace>Sorting</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -58,7 +58,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -72,17 +73,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
+    <ClCompile Include="Sorting.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Common\HandleException.h" />
-    <ClInclude Include="..\..\src\Tree\AVLTree.h" />
-    <ClInclude Include="..\..\src\Tree\BSTree.h" />
-    <ClInclude Include="..\..\src\Tree\BTree.h" />
-    <ClInclude Include="..\..\src\Tree\Heap.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\UnitTest\Tree.cpp" />
+    <ClInclude Include="..\..\src\Sorting\HeapSorter.h" />
+    <ClInclude Include="..\..\src\Sorting\InsertSorter.h" />
+    <ClInclude Include="..\..\src\Sorting\MergeSorter.h" />
+    <ClInclude Include="..\..\src\Sorting\QucikSorter.h" />
+    <ClInclude Include="..\..\src\Sorting\RadixSorter.h" />
+    <ClInclude Include="..\..\src\Sorting\Sorter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

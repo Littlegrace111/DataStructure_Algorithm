@@ -1,34 +1,37 @@
 #ifndef _AVL_TREE_H
 #define _AVL_TREE_H
 
-#include "BTree.h"
-#include "BSTree.h"
+#include "BinaryTree.h"
+#include "BSearchTree.h"
 
 template<typename T>
-class CAVLTree: public CBSTree<T>{
+class CAVLTree: public BSearchTree<T>{
 private:
-	CBTNode<T>* RightRotate(CBTNode<T> *a);
-	CBTNode<T>* LeftRotate(CBTNode<T> *a);
-	CBTNode<T>* LeftRightRotate(CBTNode<T> *a);
-	CBTNode<T>* RightLeftRotate(CBTNode<T> *a);
+	BTreeNode<T>* RightRotate(BTreeNode<T> *a);
+	BTreeNode<T>* LeftRotate(BTreeNode<T> *a);
+	BTreeNode<T>* LeftRightRotate(BTreeNode<T> *a);
+	BTreeNode<T>* RightLeftRotate(BTreeNode<T> *a);
 protected:
-	CBTNode<T>* Rotate(const T &data, CBTNode<T>* p);
-	CBTNode<T>* InsertNode(const T &data, CBTNode<T>* p);
-	CBTNode<T>* DeleteNode(const T &data, CBTNode<T>* p);
+	BTreeNode<T>* Rotate(const T &data, BTreeNode<T>* p);
+	BTreeNode<T>* InsertNode(const T &data, BTreeNode<T>* p);
+	BTreeNode<T>* DeleteNode(const T &data, BTreeNode<T>* p);
 public:
-	void Delete(const T &data) { DeleteNode(data, m_pNodeRoot);}
-	void Insert(const T &data) { InsertNode(data, m_pNodeRoot);}
+	void Delete(const T &data) { DeleteNode(data, root);}
+	void Insert(const T &data) { InsertNode(data, root);}
 };
 
 template<typename T>
-inline CBTNode<T>* CAVLTree<T>::Rotate( const T &data, CBTNode<T>* p )
+inline BTreeNode<T>* CAVLTree<T>::Rotate( const T &data, BTreeNode<T>* p )
 {
-	if( 2 == GetDepth(p->left)-GetDepth(p->right)){//rotate
+	int LeftDepth = GetDepth(p->left);
+	int RightDepth = GetDepth(p->right);
+
+	if( 2 == LeftDepth - RightDepth){//rotate
 		if(data < p->left->data)
 			p = LeftRotate(p);
 		else
 			p = LeftRightRotate(p);
-	}else if(2 == GetDepth(p->right)-GetDepth(p->left)){//rotate
+	}else if(2 == RightDepth - LeftDepth){//rotate
 		if(data > p->right->data)
 			p = RightRotate(p);
 		else
@@ -44,17 +47,18 @@ inline CBTNode<T>* CAVLTree<T>::Rotate( const T &data, CBTNode<T>* p )
 //2. 用该结点的右孩子的最左孩子替换该结点(右子树的最小结点)；
 //3. 重新调整以该结点为根的子树为AVL树;
 template<typename T>
-inline CBTNode<T>* CAVLTree<T>::DeleteNode( const T &data, CBTNode<T>* p )
+inline BTreeNode<T>* CAVLTree<T>::DeleteNode( const T &data, BTreeNode<T>* p )
 {
 	if(p == NULL) 
 		return NULL;
+
 	if(data == p->data){//allocated the node p
 		if(p->right == NULL){
-			CBTNode<T>* pTemp = p;
+			BTreeNode<T>* pTemp = p;
 			p = p->left;
 			delete pTemp;
 		}else {
-			CBTNode<T>* pTemp = p->right;
+			BTreeNode<T>* pTemp = p->right;
 			pTemp = FindMin(pTemp);
 			p->data = pTemp->data;//just copy the data
 			p->right = DeleteNode(p->data, p->right);
@@ -69,30 +73,45 @@ inline CBTNode<T>* CAVLTree<T>::DeleteNode( const T &data, CBTNode<T>* p )
 		if(p->left)
 			Rotate(data, p->left);
 	}
-	if(p) Rotate(data, p);
+	//if(p) Rotate(data, p);
 }
 
 template<typename T>
-inline CBTNode<T>* CAVLTree<T>::InsertNode( const T &data, CBTNode<T>* p )
+inline BTreeNode<T>* CAVLTree<T>::InsertNode( const T &data, BTreeNode<T>* p )
 {
+	if(root == NULL){//if an empty tree, create root node;
+		root = CreateNewNode(data);
+		return root;
+	}
+
 	if(NULL == p)
 	{   //create and return a one-node tree	
 		p = CreateNewNode(data);
 	}else if(data < p->data){//left child
-		p->left = InsertNode(data, p);
-		if( 2 == GetDepth(p->left)-GetDepth(p->right)){//rotate
+		p->left = InsertNode(data, p->left);
+
+		int LeftDepth = GetDepth(p->left);
+		int RightDepth = GetDepth(p->right);
+		if( 2 == LeftDepth - RightDepth){//rotate
 			if(data < p->left->data)
-				p = LeftRotate(p);
+				//p = LeftRotate(p);
+				p = RightRotate(p);
 			else
-				p = LeftRightRotate(p);
+				//p = LeftRightRotate(p);
+				p = RightLeftRotate(p);
 		}
 	}else if(data > p->data){
 		p->right = InsertNode(data, p->right);
-		if(2 == GetDepth(p->right)-GetDepth(p->left)){//rotate
+
+		int LeftDepth = GetDepth(p->left);
+		int RightDepth = GetDepth(p->right);
+		if(2 == RightDepth - LeftDepth){//rotate
 			if(data > p->right->data)
-				p = RightRotate(p);
+				//p = RightRotate(p);
+				p = LeftRotate(p);
 			else
-				p = RightLeftRotate(p);
+				//p = RightLeftRotate(p);
+				p = LeftRightRotate(p);
 		}
 	}
 	return p;
@@ -114,7 +133,7 @@ inline CBTNode<T>* CAVLTree<T>::InsertNode( const T &data, CBTNode<T>* p )
 //         / \                   \
 //        4   6                   6
 template<typename T>
-inline CBTNode<T>* CAVLTree<T>::RightLeftRotate( CBTNode<T> *a )
+inline BTreeNode<T>* CAVLTree<T>::RightLeftRotate( BTreeNode<T> *a )
 {
 	a->right = RightRotate(a->right);
 	return LeftRightRotate(a);
@@ -136,7 +155,7 @@ inline CBTNode<T>* CAVLTree<T>::RightLeftRotate( CBTNode<T> *a )
 //     / \                 /
 //    1   3               1
 template<typename T>
-inline CBTNode<T>* CAVLTree<T>::LeftRightRotate( CBTNode<T> *a )
+inline BTreeNode<T>* CAVLTree<T>::LeftRightRotate( BTreeNode<T> *a )
 {
 	a->left = LeftRotate(a->left);
 	return RightRotate(a);
@@ -150,11 +169,17 @@ inline CBTNode<T>* CAVLTree<T>::LeftRightRotate( CBTNode<T> *a )
 //  AL  AR              AR  BR
 //  +
 template<typename T>
-inline CBTNode<T>* CAVLTree<T>::LeftRotate( CBTNode<T> *a )
+inline BTreeNode<T>* CAVLTree<T>::LeftRotate( BTreeNode<T> *a )
 {
-	CBTNode<T>* b = a->right;
+	BTreeNode<T>* b = a->right;
     a->right = b->left;
 	b->left = a;
+
+	//if root, update root node
+	if(a == root){
+		root = b;
+	}
+
 	return b;
 }
 
@@ -166,11 +191,16 @@ inline CBTNode<T>* CAVLTree<T>::LeftRotate( CBTNode<T> *a )
 //      BL  BR       AL  BL
 //          +
 template<typename T>
-inline CBTNode<T>* CAVLTree<T>::RightRotate( CBTNode<T> *a )
+inline BTreeNode<T>* CAVLTree<T>::RightRotate( BTreeNode<T> *a )
 {   //rotate
-	CBTNode<T> *b = a->left;
+	BTreeNode<T> *b = a->left;
 	a->left = b->right;
 	b->right = a;
+
+	//if root, update root node
+	if(a == root){
+		root = b;
+	}
 	return b;
 }
 

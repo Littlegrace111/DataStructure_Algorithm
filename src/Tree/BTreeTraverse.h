@@ -1,23 +1,35 @@
-#ifndef _BINARY_TREE_H
-#define _BINARY_TREE_H
-
-#include "..\Common\HandleException.h"
-#include "..\Common\MemoryLeakTest.h"
+#ifndef _BTREE_TRAVERSE_H
+#define _BTREE_TRAVERSE_H
 #include "..\LinkerList\Queue.h"
 #include "..\LinkerList\Stack.h"
 #include "BinaryTree.h"
 
-//通常情况下来讲：二叉树的周游，前序的效率是最高的，能用前序的尽量使用前序，
-//效率由高到低：前序->中序->后序
+//decalaration
+template<class T> class BinaryTree;
+
+//Visit回调函数
 template<class T>
-class BTreeTraverse : public BinaryTree<T>{
+void PrintElement(const T &data)
+{
+	std::cout<<data;
+}
+
+template<class T>
+class BTreeTraverse /*: public BinaryTree<T>*/{
+	friend class BinaryTree<T>;
 public:
-	BTreeTraverse(BTreeNode<T>* current = NULL):BinaryTree(current) {}
-	~BTreeTraverse(){}
+	//BTreeTraverse(BTreeNode<T>* current): BinaryTree(current) {}
+	//~BTreeTraverse() {}
 private:
 	//用于二叉树周游的通用框架：统一支持前序，中序，后序
 	enum Order{Pre, In, Post};
-	//////////////////////////////////////////////////////
+	//递归周游的通用框架
+	void Traverse(
+		const Order order,
+		const BTreeNode<T> *p,
+		void (*Visit)(const T &data)
+		)const;
+
 	//非递归版本
 	void PreOrderTraverseWithoutRecursion(
 		const BTreeNode<T> *root,
@@ -34,7 +46,6 @@ private:
 		void (*Visit)(const T &data)
 	)const;
 
-	//////////////////////////////////////////////////////
 	//非递归周游的通用框架
 	/*Trace标识位：
 	* Left: 标识此节点已经周游完其左子树;
@@ -54,14 +65,6 @@ private:
 		void (*Visit)(const T &data)
 	)const;
 
-	/////////////////////////////////////////////////////////
-	//递归周游的通用框架
-	void Traverse(
-		const Order order,
-		const BTreeNode<T> *p,
-		void (*Visit)(const T &data)
-	)const;
-	/////////////////////////////////////////////////////////
 	//广度优先周游
 	void LevelOrderTraverse(
 		const BTreeNode<T>* p,
@@ -69,42 +72,42 @@ private:
 	)const;
 
 public:
-	void PreOrderTraverseWithoutRecursion(void (*Visit)(const T &data))
+	void PreOrderTraverseWithoutRecursion(BinaryTree<T> &tree, void (*Visit)(const T &data))
 	{
-		PreOrderTraverseWithoutRecursion(m_pNodeRoot, Visit);
+		PreOrderTraverseWithoutRecursion(tree.root, Visit);
 		//TraverseWithoutRecursion(Pre, m_pNodeRoot, Visit);
 	}
-	void InOrderTraverseWithoutRecursion(void (*Visit)(const T &data))
+	void InOrderTraverseWithoutRecursion(BinaryTree<T> &tree, void (*Visit)(const T &data))
 	{
 		//InOrderTraverseWithoutRecursion(m_pNodeRoot, Visit);
-		TraverseWithoutRecursion(In, m_pNodeRoot, Visit);
+		TraverseWithoutRecursion(In, tree.root, Visit);
 	}
-	void PostOrderTraverseWithoutRecursion(void (*Visit)(const T &data))
+	void PostOrderTraverseWithoutRecursion(BinaryTree<T> &tree, void (*Visit)(const T &data))
 	{
 		//PostOrderTraverseWithoutRecursion(m_pNodeRoot, Visit);
-		TraverseWithoutRecursion(Post, m_pNodeRoot, Visit);
+		TraverseWithoutRecursion(Post, tree.root, Visit);
 	}
 	
-	void PreOrderTraverse(void (*Visit)(const T &data))
+	void PreOrderTraverse(BinaryTree<T> &tree, void (*Visit)(const T &data))
 	{ 
 		//PreOrderTraverse(m_pNodeRoot, Visit); 
-		Traverse(Pre, m_pNodeRoot, Visit);
+		Traverse(Pre, tree.root, Visit);
 	}
-	void InOrderTraverse(void (*Visit)(const T &data))
+	void InOrderTraverse(BinaryTree<T> &tree, void (*Visit)(const T &data))
 	{ 
 		//InOrderTraverse(m_pNodeRoot, Visit); 
-		Traverse(In, m_pNodeRoot, Visit);
+		Traverse(In, tree.root, Visit);
 	}
-	void PostOrderTraverse(void (*Visit)(const T &data))
+	void PostOrderTraverse(BinaryTree<T> &tree, void (*Visit)(const T &data))
 	{ 
 		//PostOrderTraverse(m_pNodeRoot, Visit); 
-		Traverse(Post, m_pNodeRoot, Visit);
+		Traverse(Post, tree.root, Visit);
 	}
 
 	//广度优先遍历
-	void LevelOrderTraverse(void (*Visit)(const T &data))
+	void LevelOrderTraverse(BinaryTree<T> &tree, void (*Visit)(const T &data))
 	{
-		LevelOrderTraverse(m_pNodeRoot, Visit);
+		LevelOrderTraverse(tree.root, Visit);
 	}
 };
 
@@ -172,11 +175,11 @@ inline void BTreeTraverse<T>::TraverseWithoutRecursion(
 		//右子树遍历完，弹栈
 		while(Right == element.tag){
 			if(Post == order)
-		        Visit(pointer->data);
-		    if(aStack.IsEmpty())
-		        return;
+				Visit(pointer->data);
+			if(aStack.IsEmpty())
+				return;
 			aStack.pop(element);
-		    pointer = element.pointer;
+			pointer = element.pointer;
 		}
 		//左子树遍历完遍历右子树
 		if(Left == element.tag){
@@ -203,7 +206,7 @@ inline void BTreeTraverse<T>::PreOrderTraverseWithoutRecursion(
 {
 	CStack<BTreeNode<T>* > aStack;
 	BTreeNode<T>* pointer = const_cast<BTreeNode<T>* >(root);
-	
+
 	//// 教程书的经典实现版本：
 	//while(!aStack.IsEmpty() || pointer)
 	//{

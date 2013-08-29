@@ -3,8 +3,13 @@
 #include <string>
 #include "..\Tree\BTree.h"
 #include "..\Tree\BSTree.h"
+#include "..\Tree\AVLTree.h"
+#include "..\LinkerList\Queue.h"
 
 using namespace std;
+
+template<typename T>
+void PrintTree(const CBTree<T> &tree);
 
 //Visit回调函数
 template<typename T>
@@ -49,12 +54,38 @@ static void BinarySearchTreeTest()
 	int testcase[] = {2};
 	CBSTree<int> BSTree;
 	
-	BSTree.InsertNode(5);
+	BSTree.Insert(5);
 	for(int i=0; i<10; i++)
-		BSTree.InsertNode(i);
+		BSTree.Insert(i);
 
 	cout<<endl<<"InOrder: "<<endl;
 	BSTree.InOrderTraverse(PrintElement);
+
+	BSTree.Delete(5);
+}
+
+static void AVLTreeTest()
+{
+	CBTree<int>* pAvl = new CAVLTree<int>;
+	pAvl->Insert(14);
+	pAvl->Insert(11);
+	pAvl->Insert(13);
+	pAvl->Insert(1);
+    pAvl->Insert(4);
+	pAvl->Insert(3);
+	pAvl->Insert(15);
+	pAvl->Insert(2);
+	pAvl->Insert(9);
+	pAvl->Insert(10);
+	pAvl->Insert(8);
+	pAvl->Insert(7);
+
+	pAvl->Delete(10);
+	pAvl->Delete(8);
+	pAvl->Delete(7);
+	pAvl->Delete(13);
+
+	pAvl->PrintTree();
 }
 
 int main(int argc, char* argv[])
@@ -62,8 +93,9 @@ int main(int argc, char* argv[])
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
-	BinaryTreeTest();
-	BinarySearchTreeTest();
+	//BinaryTreeTest();
+	//BinarySearchTreeTest();
+	AVLTreeTest();
 	//退出
 	char temp;
 	cin>>temp;

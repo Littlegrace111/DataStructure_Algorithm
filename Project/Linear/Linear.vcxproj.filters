@@ -13,29 +13,41 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{d1e62846-09e5-409a-8784-6c2dbef549bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\Tree\BTree.h">
+    <ClInclude Include="..\..\src\LinkerList\SLinker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Tree\BSTree.h">
+    <ClInclude Include="..\..\src\LinkerList\CLinker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\LinkerList\Stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Common\HandleException.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Tree\AVLTree.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\src\Common\MemoryLeakTest.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Tree\Heap.h">
+    <ClInclude Include="..\..\src\LinkerList\Queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\UnitTest\Tree.cpp">
+    <ClCompile Include="..\..\src\UnitTest\Polynomial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UnitTest\Joseph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UnitTest\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UnitTest\Expression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
